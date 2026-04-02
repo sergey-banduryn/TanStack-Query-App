@@ -31,4 +31,13 @@ async function getComments(id) {
   ).then((r) => r.json());
 }
 
-export { getPosts, createPost, getPost, getComments };
+async function deletePost(id) {
+  const response = await fetch(`/api/posts/${id}`, {
+    method: 'DELETE',
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+}
+
+export { getPosts, createPost, getPost, getComments, deletePost };
