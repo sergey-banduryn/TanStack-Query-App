@@ -2,17 +2,17 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postKeys } from '../react-query/queryKeys';
 import { createPost } from '../api';
-import Notification from './Notification';
+import useNotification from './useNotification';
 
 let id = 100;
 let userId = 1;
 
 function CreatePost() {
   const queryClient = useQueryClient();
+  const [notify, notification] = useNotification();
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
-  const [toastId, setToastId] = useState(null);
 
   const mutation = useMutation({
     mutationFn: createPost,
@@ -20,7 +20,10 @@ function CreatePost() {
       queryClient.invalidateQueries({ queryKey: postKeys.all });
       setTitle('');
       setBody('');
-      setToastId(Date.now());
+      notify('Post created successfully');
+    },
+    onError: () => {
+      notify('Error creating post');
     },
   });
 
@@ -32,9 +35,6 @@ function CreatePost() {
 
   return (
     <div style={styles.container}>
-      {toastId && (
-        <Notification key={toastId}>Post created successfully</Notification>
-      )}
       <h2 style={styles.title}>Create New Post</h2>
       <form onSubmit={handleSubmit} style={styles.form}>
         <div style={styles.inputGroup}>
@@ -77,9 +77,7 @@ function CreatePost() {
           {mutation.isPending ? 'Creating...' : 'Create Post'}
         </button>
       </form>
-      {mutation.isError && (
-        <p style={styles.errorText}>Error: {mutation.error.message}</p>
-      )}
+      {notification}
     </div>
   );
 }
