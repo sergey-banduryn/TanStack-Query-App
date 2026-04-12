@@ -40,4 +40,18 @@ async function deletePost(id) {
   }
 }
 
-export { getPosts, createPost, getPost, getComments, deletePost };
+async function updatePost(post) {
+  const response = await fetch(`/api/posts/${post.id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ post }),
+  });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  return response.json().then(({ post }) => post);
+}
+
+export { getPosts, createPost, getPost, getComments, deletePost, updatePost };

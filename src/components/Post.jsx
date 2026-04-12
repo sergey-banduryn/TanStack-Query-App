@@ -1,15 +1,22 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams, useNavigate } from 'react-router';
+import { useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useParams } from 'react-router';
 import { postKeys } from '../react-query/queryKeys';
 import Comments from './Comments';
-import { getPost, deletePost } from '../api';
+import { getPost } from '../api';
+import EditPostForm from './EditPostForm';
+import PostContent from './PostContent';
 
 function Post() {
   let { id } = useParams();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [isEditing, setIsEditing] = useState(false);
 
-  const { data: post = {} } = useQuery({
+  const {
+    data: post,
+    isLoading,
+    isSuccess,
+  } = useQuery({
     queryKey: postKeys.detail(id),
     queryFn: () => getPost(id),
     placeholderData: () => {
@@ -19,33 +26,22 @@ function Post() {
     },
   });
 
-  const deleteMutation = useMutation({
-    mutationFn: () => deletePost(id),
-    onSuccess: () => {
-      queryClient.setQueryData(postKeys.all, (oldData) => {
-        if (!oldData) return [];
-        return oldData.filter((p) => String(p.id) !== String(id));
-      });
-      navigate(-1);
-    },
-  });
-
   return (
     <>
-      <article key={post.id} style={styles.postCard}>
-        <div style={styles.header}>
-          <h2 style={styles.title}>{post.title}</h2>
-          <button
-            onClick={() => deleteMutation.mutate()}
-            disabled={deleteMutation.isPending}
-            style={styles.deleteBtn}
-          >
-            {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
-          </button>
-        </div>
-        <p style={styles.body}>{post.body}</p>
+      <article style={styles.postCard}>
+        {isLoading && <p>Loading post...</p>}
+        {isSuccess && !post && <p>Post not found</p>}
+        {isSuccess &&
+          post &&
+          (isEditing ? (
+            <EditPostForm post={post} onCancel={() => setIsEditing(false)} />
+          ) : (
+            <>
+              <PostContent post={post} onEdit={() => setIsEditing(true)} />
+              <Comments id={id} />
+            </>
+          ))}
       </article>
-      <Comments id={id} />
     </>
   );
 }
@@ -58,36 +54,6 @@ const styles = {
     backgroundColor: '#fff',
     boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
     marginBottom: '20px',
-  },
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: '15px',
-  },
-  title: {
-    fontSize: '1.5rem',
-    margin: 0,
-    color: '#111',
-    textTransform: 'capitalize',
-    fontWeight: '700',
-  },
-  deleteBtn: {
-    backgroundColor: '#ff4d4f',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    transition: 'all 0.2s',
-  },
-  body: {
-    fontSize: '1rem',
-    margin: 0,
-    color: '#444',
-    lineHeight: '1.6',
   },
 };
 
