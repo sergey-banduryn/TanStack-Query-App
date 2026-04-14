@@ -1,16 +1,26 @@
-import { useEffect, useState } from 'react';
+/* eslint-disable react-refresh/only-export-components */
+import { createContext, useContext, useState, useCallback } from 'react';
 
-const Notification = ({ children }) => {
-  const [visible, setVisible] = useState(true);
+const NotificationContext = createContext();
 
-  useEffect(() => {
-    const timer = setTimeout(() => setVisible(false), 3000);
-    return () => clearTimeout(timer);
+export const NotificationProvider = ({ children }) => {
+  const [message, setMessage] = useState(null);
+
+  const notify = useCallback((text) => {
+    setMessage(text);
+    setTimeout(() => setMessage(null), 3000);
   }, []);
 
-  if (!visible) return null;
+  return (
+    <NotificationContext.Provider value={notify}>
+      {children}
+      {message && <div style={styles}>{message}</div>}
+    </NotificationContext.Provider>
+  );
+};
 
-  return <div style={styles}>{children}</div>;
+export const useNotification = () => {
+  return useContext(NotificationContext);
 };
 
 const styles = {
@@ -23,6 +33,5 @@ const styles = {
   right: '20px',
   zIndex: 1000,
   boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+  fontFamily: '"Outfit", "Inter", sans-serif',
 };
-
-export default Notification;

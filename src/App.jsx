@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Router from './router/Router';
+import { NotificationProvider } from './components/Notification';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -16,7 +17,9 @@ function App() {
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />
-        <Router />
+        <NotificationProvider>
+          <Router />
+        </NotificationProvider>
       </QueryClientProvider>
     </BrowserRouter>
   );

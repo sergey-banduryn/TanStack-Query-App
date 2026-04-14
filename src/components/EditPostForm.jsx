@@ -1,7 +1,9 @@
 import { useUpdatePost } from '../react-query/mutations';
+import { useNotification } from './Notification';
 
 function EditPostForm({ post, onCancel }) {
   const updateMutation = useUpdatePost(post.id);
+  const notify = useNotification();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,11 +14,9 @@ function EditPostForm({ post, onCancel }) {
       const mutationPromise = updateMutation.mutateAsync({ ...post, ...data });
       onCancel();
       await mutationPromise;
+      notify('Post updated successfully');
     } catch (error) {
-      // useNotification не успеет отобразить ошибку,
-      // уже будет размонтирован из-за onCancel
-      // нужно делать глобальный Notification
-      alert(error);
+      notify(error.message);
     }
   };
 

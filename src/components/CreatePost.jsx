@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import useNotification from './useNotification';
+import { useNotification } from './Notification';
 import { useCreatePost } from '../react-query/mutations';
 
 let id = 100;
 let userId = 1;
 
 function CreatePost() {
-  const [notify, notification] = useNotification();
+  const notify = useNotification();
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const mutation = useCreatePost();
@@ -20,8 +20,8 @@ function CreatePost() {
       setTitle('');
       setBody('');
       notify('Post created successfully');
-    } catch {
-      notify('Error creating post');
+    } catch (error) {
+      notify(error.message);
     }
   };
 
@@ -69,7 +69,6 @@ function CreatePost() {
           {mutation.isPending ? 'Creating...' : 'Create Post'}
         </button>
       </form>
-      {notification}
     </div>
   );
 }

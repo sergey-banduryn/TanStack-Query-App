@@ -1,16 +1,19 @@
 import { useNavigate } from 'react-router';
 import { useDeletePost } from '../react-query/mutations';
+import { useNotification } from './Notification';
 
 function PostContent({ post, onEdit }) {
   const navigate = useNavigate();
   const deleteMutation = useDeletePost(post.id);
+  const notify = useNotification();
 
   const handleDelete = async () => {
     try {
       await deleteMutation.mutateAsync();
       navigate(-1);
+      notify('Post deleted successfully');
     } catch (error) {
-      console.error('Error deleting post:', error);
+      notify(error.message);
     }
   };
 
