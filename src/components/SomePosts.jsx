@@ -1,45 +1,23 @@
-import { useQueries, useQueryClient } from '@tanstack/react-query';
 import Spinner from './Spinner';
-import { postKeys } from '../react-query/queryKeys';
 import PostsList from './PostsList';
-import { getPost } from '../api';
+import { useSomePosts } from '../react-query/queries';
+import { useResetAllPosts } from '../react-query/common';
 
 const ids = ['1', '2', '3', '4', '5'];
 
 function SomePosts() {
-  const queryClient = useQueryClient();
-
-  const results = useQueries({
-    queries: ids.map((id) => ({
-      queryKey: postKeys.detail(id),
-      queryFn: async () => {
-        await new Promise((r) => setTimeout(r, id * 1000));
-        return getPost(id);
-      },
-    })),
-    combine: (results) => {
-      return {
-        posts: results.filter((res) => res.isSuccess).map((res) => res.data),
-        isLoading: results.some((res) => res.isLoading),
-      };
-    },
-  });
-
-  const handleReset = () => {
-    queryClient.resetQueries(postKeys.all);
-  };
+  const resetAllPosts = useResetAllPosts();
+  const { posts, isLoading } = useSomePosts(ids);
 
   return (
     <>
       <div style={styles.controls}>
-        <button style={styles.toggleButton} onClick={handleReset}>
+        <button style={styles.toggleButton} onClick={resetAllPosts}>
           Reset
         </button>
       </div>
-      <h1 style={styles.heading}>
-        Recent Posts {results.isLoading && <Spinner />}
-      </h1>
-      <PostsList posts={results.posts} />
+      <h1 style={styles.heading}>Recent Posts {isLoading && <Spinner />}</h1>
+      <PostsList posts={posts} />
     </>
   );
 }

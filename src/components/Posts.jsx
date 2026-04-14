@@ -1,26 +1,12 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { postKeys } from '../react-query/queryKeys';
 import PostsList from './PostsList';
-import { getPosts } from '../api';
+import { useResetAllPosts } from '../react-query/common';
+import { useGetPosts } from '../react-query/queries';
 
 function Posts() {
   const [enabled, setEnabled] = useState(true);
-  const queryClient = useQueryClient();
-
-  const {
-    data: posts = [],
-    refetch,
-    isLoading,
-  } = useQuery({
-    queryKey: postKeys.all,
-    queryFn: getPosts,
-    enabled: enabled,
-  });
-
-  const handleReset = () => {
-    queryClient.resetQueries(postKeys.all);
-  };
+  const resetAllPosts = useResetAllPosts();
+  const { data: posts = [], refetch, isLoading } = useGetPosts(enabled);
 
   return (
     <>
@@ -34,7 +20,7 @@ function Posts() {
         <button style={styles.toggleButton} onClick={() => refetch()}>
           Refetch
         </button>
-        <button style={styles.toggleButton} onClick={handleReset}>
+        <button style={styles.toggleButton} onClick={resetAllPosts}>
           Reset
         </button>
       </div>

@@ -1,36 +1,28 @@
 import { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { postKeys } from '../react-query/queryKeys';
-import { createPost } from '../api';
 import useNotification from './useNotification';
+import { useCreatePost } from '../react-query/mutations';
 
 let id = 100;
 let userId = 1;
 
 function CreatePost() {
-  const queryClient = useQueryClient();
   const [notify, notification] = useNotification();
-
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const mutation = useCreatePost();
 
-  const mutation = useMutation({
-    mutationFn: createPost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.all });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    id++;
+
+    try {
+      await mutation.mutateAsync({ title, body, userId, id });
       setTitle('');
       setBody('');
       notify('Post created successfully');
-    },
-    onError: () => {
+    } catch {
       notify('Error creating post');
-    },
-  });
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    id++;
-    mutation.mutate({ title, body, userId, id });
+    }
   };
 
   return (

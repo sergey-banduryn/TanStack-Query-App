@@ -1,36 +1,23 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updatePost } from '../api';
-import { postKeys } from '../react-query/queryKeys';
+import { useUpdatePost } from '../react-query/mutations';
 
 function EditPostForm({ post, onCancel }) {
-  const queryClient = useQueryClient();
+  const updateMutation = useUpdatePost(post.id);
 
-  const updateMutation = useMutation({
-    mutationFn: updatePost,
-    onMutate: async (newPost) => {
-      await queryClient.cancelQueries({ queryKey: postKeys.detail(post.id) });
-      const previousPost = queryClient.getQueryData(postKeys.detail(post.id));
-      queryClient.setQueryData(postKeys.detail(post.id), (old) => ({
-        ...old,
-        ...newPost,
-      }));
-      onCancel();
-      return { previousPost };
-    },
-    onError: (err, newPost, context) => {
-      queryClient.setQueryData(postKeys.detail(post.id), context.previousPost);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.detail(post.id) });
-      queryClient.refetchQueries({ queryKey: postKeys.all });
-    },
-  });
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData);
-    updateMutation.mutate({ ...post, ...data });
+
+    try {
+      const mutationPromise = updateMutation.mutateAsync({ ...post, ...data });
+      onCancel();
+      await mutationPromise;
+    } catch (error) {
+      // useNotification не успеет отобразить ошибку,
+      // уже будет размонтирован из-за onCancel
+      // нужно делать глобальный Notification
+      alert(error);
+    }
   };
 
   return (

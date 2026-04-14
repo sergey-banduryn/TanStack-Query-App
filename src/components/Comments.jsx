@@ -1,16 +1,7 @@
-import { useQuery } from '@tanstack/react-query';
-import { postKeys } from '../react-query/queryKeys';
-import { getComments } from '../api';
+import { useGetComments } from '../react-query/queries';
 
 function Comments({ id }) {
-  const {
-    data: comments = [],
-    isLoading,
-    isSuccess,
-  } = useQuery({
-    queryKey: postKeys.comments(id),
-    queryFn: () => getComments(id),
-  });
+  const { data: comments = [], isLoading, isSuccess } = useGetComments(id);
 
   return (
     <section style={styles.section}>

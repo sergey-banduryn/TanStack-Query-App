@@ -1,23 +1,18 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import { deletePost } from '../api';
-import { postKeys } from '../react-query/queryKeys';
+import { useDeletePost } from '../react-query/mutations';
 
 function PostContent({ post, onEdit }) {
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const deleteMutation = useDeletePost(post.id);
 
-  const deleteMutation = useMutation({
-    mutationFn: () => deletePost(post.id),
-    onSuccess: () => {
-      queryClient.removeQueries({ queryKey: postKeys.detail(post.id) });
-      queryClient.setQueryData(postKeys.all, (oldData) => {
-        if (!oldData) return [];
-        return oldData.filter((p) => p.id !== post.id);
-      });
+  const handleDelete = async () => {
+    try {
+      await deleteMutation.mutateAsync();
       navigate(-1);
-    },
-  });
+    } catch (error) {
+      console.error('Error deleting post:', error);
+    }
+  };
 
   return (
     <>
@@ -28,7 +23,7 @@ function PostContent({ post, onEdit }) {
             Edit
           </button>
           <button
-            onClick={() => deleteMutation.mutate()}
+            onClick={handleDelete}
             disabled={deleteMutation.isPending}
             style={styles.deleteBtn}
           >

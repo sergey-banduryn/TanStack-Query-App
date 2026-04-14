@@ -1,20 +1,15 @@
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
-import { postKeys } from '../react-query/queryKeys';
 import PostsList from './PostsList';
-import { getPosts } from '../api';
+import { useSuspenseGetPosts } from '../react-query/queries';
+import { useResetAllPosts } from '../react-query/common';
 
 function PostsSuspense() {
-  const queryClient = useQueryClient();
-
-  const handleReset = () => {
-    queryClient.resetQueries(postKeys.all);
-  };
+  const resetAllPosts = useResetAllPosts();
 
   return (
     <>
       <div style={styles.controls}>
-        <button style={styles.toggleButton} onClick={handleReset}>
+        <button style={styles.toggleButton} onClick={resetAllPosts}>
           Reset
         </button>
       </div>
@@ -27,10 +22,7 @@ function PostsSuspense() {
 }
 
 function PostsListSuspense() {
-  const { data: posts } = useSuspenseQuery({
-    queryKey: postKeys.all,
-    queryFn: getPosts,
-  });
+  const { data: posts } = useSuspenseGetPosts();
 
   return <PostsList posts={posts} />;
 }

@@ -1,30 +1,14 @@
 import { useState } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router';
-import { postKeys } from '../react-query/queryKeys';
 import Comments from './Comments';
-import { getPost } from '../api';
 import EditPostForm from './EditPostForm';
 import PostContent from './PostContent';
+import { useGetPost } from '../react-query/queries';
 
 function Post() {
   let { id } = useParams();
-  const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
-
-  const {
-    data: post,
-    isLoading,
-    isSuccess,
-  } = useQuery({
-    queryKey: postKeys.detail(id),
-    queryFn: () => getPost(id),
-    placeholderData: () => {
-      const posts = queryClient.getQueryData(postKeys.all);
-      const post = posts?.find((post) => post.id === id);
-      return post;
-    },
-  });
+  const { data: post, isLoading, isSuccess } = useGetPost(id);
 
   return (
     <>
