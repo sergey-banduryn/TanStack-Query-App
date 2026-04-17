@@ -4,36 +4,30 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import { postKeys } from './queryKeys';
-import { getComments, getPost, getPosts } from '../api';
+import { postOptions } from './queryOptions';
 
 function useGetComments(id) {
-  return useQuery({
-    queryFn: () => getComments(id),
-    queryKey: postKeys.comments(id),
-  });
+  return useQuery(postOptions.comments(id));
 }
 
 function useGetPost(id) {
   const queryClient = useQueryClient();
 
   return useQuery({
+    ...postOptions.detail(id),
     placeholderData: () => {
-      const posts = queryClient.getQueryData(postKeys.all);
+      const posts = queryClient.getQueryData(postOptions.all().queryKey);
       const post = posts?.find((post) => post.id === id);
 
       return post;
     },
-    queryFn: () => getPost(id),
-    queryKey: postKeys.detail(id),
   });
 }
 
 function useGetPosts(enabled = true) {
   return useQuery({
+    ...postOptions.all(),
     enabled: enabled,
-    queryFn: getPosts,
-    queryKey: postKeys.all,
   });
 }
 
@@ -45,22 +39,24 @@ function useSomePosts(ids) {
         posts: results.filter((res) => res.isSuccess).map((res) => res.data),
       };
     },
-    queries: ids.map((id) => ({
-      queryFn: async () => {
-        await new Promise((r) => setTimeout(r, id * 1000));
+    queries: ids.map((id) => {
+      const options = postOptions.detail(id);
 
-        return getPost(id);
-      },
-      queryKey: postKeys.detail(id),
-    })),
+      // eslint-disable-next-line @tanstack/query/prefer-query-options
+      return {
+        ...options,
+        queryFn: async (context) => {
+          await new Promise((r) => setTimeout(r, id * 1000));
+
+          return options.queryFn(context);
+        },
+      };
+    }),
   });
 }
 
 function useSuspenseGetPosts() {
-  return useSuspenseQuery({
-    queryFn: getPosts,
-    queryKey: postKeys.all,
-  });
+  return useSuspenseQuery(postOptions.all());
 }
 
 export {

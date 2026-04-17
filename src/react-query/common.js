@@ -1,10 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { postKeys } from './queryKeys';
+import { postOptions } from './queryOptions';
 
 function useResetAllPosts() {
   const queryClient = useQueryClient();
 
-  return () => queryClient.resetQueries(postKeys.all);
+  return () =>
+    queryClient.resetQueries({ queryKey: postOptions.all().queryKey });
 }
 
 export { useResetAllPosts };

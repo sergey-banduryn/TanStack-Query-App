@@ -1,7 +1,6 @@
-/* eslint-disable perfectionist/sort-objects */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost, deletePost, updatePost } from '../api';
-import { postKeys } from './queryKeys';
+import { postOptions } from './queryOptions';
 
 function useCreatePost() {
   const queryClient = useQueryClient();
@@ -9,7 +8,7 @@ function useCreatePost() {
   return useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.all });
+      queryClient.invalidateQueries({ queryKey: postOptions.all().queryKey });
     },
   });
 }
@@ -20,8 +19,8 @@ function useDeletePost(id) {
   return useMutation({
     mutationFn: () => deletePost(id),
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: postKeys.detail(id) });
-      queryClient.setQueryData(postKeys.all, (oldData) => {
+      queryClient.removeQueries({ queryKey: postOptions.detail(id).queryKey });
+      queryClient.setQueryData(postOptions.all().queryKey, (oldData) => {
         if (!oldData) {
           return [];
         }
@@ -38,24 +37,31 @@ function useUpdatePost(id) {
   return useMutation({
     mutationFn: updatePost,
     onMutate: async (newPost) => {
-      await queryClient.cancelQueries({ queryKey: postKeys.detail(id) });
-      const previousPost = queryClient.getQueryData(postKeys.detail(id));
-      queryClient.setQueryData(postKeys.detail(id), (old) => ({
+      await queryClient.cancelQueries({
+        queryKey: postOptions.detail(id).queryKey,
+      });
+      const previousPost = queryClient.getQueryData(
+        postOptions.detail(id).queryKey,
+      );
+      queryClient.setQueryData(postOptions.detail(id).queryKey, (old) => ({
         ...old,
         ...newPost,
       }));
 
       return { previousPost };
     },
+    // eslint-disable-next-line perfectionist/sort-objects
     onError: (err, newPost, onMutateResult) => {
       queryClient.setQueryData(
-        postKeys.detail(id),
+        postOptions.detail(id).queryKey,
         onMutateResult.previousPost,
       );
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.detail(id) });
-      queryClient.refetchQueries({ queryKey: postKeys.all });
+      queryClient.invalidateQueries({
+        queryKey: postOptions.detail(id).queryKey,
+      });
+      queryClient.refetchQueries({ queryKey: postOptions.all().queryKey });
     },
   });
 }

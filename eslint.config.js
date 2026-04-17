@@ -32,7 +32,7 @@ export default defineConfig([
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
   perfectionist.configs['recommended-natural'],
-  ...pluginQuery.configs['flat/recommended'],
+  ...pluginQuery.configs['flat/recommended-strict'],
   {
     name: 'js-core-custom',
     rules: {
