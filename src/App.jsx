@@ -1,8 +1,8 @@
-import { BrowserRouter } from 'react-router';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import Router from './router/Router';
+import { BrowserRouter } from 'react-router';
 import { NotificationProvider } from './components/Notification';
+import Router from './router/Router';
 
 const queryClient = new QueryClient({
   defaultOptions: {

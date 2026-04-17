@@ -18,29 +18,29 @@ function PostsList({ posts = [] }) {
 }
 
 const styles = {
+  body: {
+    color: '#555',
+    fontSize: '0.85rem',
+    lineHeight: '1.4',
+    margin: 0,
+  },
   list: {
     display: 'flex',
     flexDirection: 'column',
     gap: '10px',
   },
   postCard: {
+    backgroundColor: '#fff',
     border: '1px solid #eee',
     borderRadius: '4px',
-    padding: '8px 12px',
-    backgroundColor: '#fff',
     boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+    padding: '8px 12px',
   },
   title: {
+    color: '#222',
     fontSize: '1rem',
     margin: '0 0 4px 0',
-    color: '#222',
     textTransform: 'capitalize',
-  },
-  body: {
-    fontSize: '0.85rem',
-    margin: 0,
-    color: '#555',
-    lineHeight: '1.4',
   },
 };
 

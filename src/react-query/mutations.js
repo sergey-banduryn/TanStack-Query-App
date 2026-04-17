@@ -1,6 +1,36 @@
+/* eslint-disable perfectionist/sort-objects */
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createPost, deletePost, updatePost } from '../api';
 import { postKeys } from './queryKeys';
+
+function useCreatePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createPost,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: postKeys.all });
+    },
+  });
+}
+
+function useDeletePost(id) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: () => deletePost(id),
+    onSuccess: () => {
+      queryClient.removeQueries({ queryKey: postKeys.detail(id) });
+      queryClient.setQueryData(postKeys.all, (oldData) => {
+        if (!oldData) {
+          return [];
+        }
+
+        return oldData.filter((p) => p.id !== id);
+      });
+    },
+  });
+}
 
 function useUpdatePost(id) {
   const queryClient = useQueryClient();
@@ -14,6 +44,7 @@ function useUpdatePost(id) {
         ...old,
         ...newPost,
       }));
+
       return { previousPost };
     },
     onError: (err, newPost, onMutateResult) => {
@@ -29,30 +60,4 @@ function useUpdatePost(id) {
   });
 }
 
-function useDeletePost(id) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: () => deletePost(id),
-    onSuccess: () => {
-      queryClient.removeQueries({ queryKey: postKeys.detail(id) });
-      queryClient.setQueryData(postKeys.all, (oldData) => {
-        if (!oldData) return [];
-        return oldData.filter((p) => p.id !== id);
-      });
-    },
-  });
-}
-
-function useCreatePost() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: createPost,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postKeys.all });
-    },
-  });
-}
-
-export { useUpdatePost, useDeletePost, useCreatePost };
+export { useCreatePost, useDeletePost, useUpdatePost };

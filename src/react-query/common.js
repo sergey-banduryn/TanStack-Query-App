@@ -3,6 +3,7 @@ import { postKeys } from './queryKeys';
 
 function useResetAllPosts() {
   const queryClient = useQueryClient();
+
   return () => queryClient.resetQueries(postKeys.all);
 }
 

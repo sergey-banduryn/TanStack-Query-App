@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 const useNotification = () => {
   const [message, setMessage] = useState(null);
@@ -14,15 +14,15 @@ const useNotification = () => {
 };
 
 const styles = {
-  padding: '12px 20px',
   backgroundColor: '#333',
-  color: 'rgb(78, 204, 163)',
   borderRadius: '4px',
-  position: 'fixed',
-  top: '80px',
-  right: '20px',
-  zIndex: 1000,
   boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
+  color: 'rgb(78, 204, 163)',
+  padding: '12px 20px',
+  position: 'fixed',
+  right: '20px',
+  top: '80px',
+  zIndex: 1000,
 };
 
 export default useNotification;

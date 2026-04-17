@@ -1,23 +1,23 @@
 import { Navigate, Route, Routes } from 'react-router';
-import Layout from '../components/Layout';
 import { routesConfig } from './routesConfig';
+import Layout from '../components/Layout';
 
 function Router() {
   return (
     <Routes>
-      <Route path='/' element={<Layout />}>
+      <Route element={<Layout />} path='/'>
         {routesConfig.map((route, idx) => (
           <Route
-            key={route.path || idx}
-            index={route.index}
-            path={route.path}
             element={
               route.redirectTo ? (
-                <Navigate to={route.redirectTo} replace />
+                <Navigate replace to={route.redirectTo} />
               ) : (
                 <route.component />
               )
             }
+            index={route.index}
+            key={route.path || idx}
+            path={route.path}
           />
         ))}
       </Route>

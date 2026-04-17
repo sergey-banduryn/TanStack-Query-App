@@ -28,57 +28,57 @@ function Comments({ id }) {
 }
 
 const styles = {
-  section: {
-    marginTop: '20px',
+  body: {
+    color: '#374151',
+    fontSize: '0.95rem',
+    margin: 0,
+    whiteSpace: 'pre-line',
   },
-  title: {
-    fontSize: '1.5rem',
-    fontWeight: '700',
-    marginBottom: '20px',
-    color: '#111827',
-    display: 'flex',
-    alignItems: 'center',
-    gap: '8px',
-  },
-  list: {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '16px',
-  },
-  item: {
-    backgroundColor: '#f9fafb',
-    borderRadius: '12px',
-    padding: '20px',
-    border: '1px solid #f3f4f6',
-    transition: 'all 0.2s ease',
+  email: {
+    color: '#6b7280',
+    fontSize: '0.8rem',
+    marginTop: '2px',
   },
   header: {
     display: 'flex',
     flexDirection: 'column',
     marginBottom: '8px',
   },
-  name: {
-    fontWeight: '600',
-    fontSize: '0.95rem',
-    color: '#111827',
-    textTransform: 'capitalize',
+  item: {
+    backgroundColor: '#f9fafb',
+    border: '1px solid #f3f4f6',
+    borderRadius: '12px',
+    padding: '20px',
+    transition: 'all 0.2s ease',
   },
-  email: {
-    fontSize: '0.8rem',
-    color: '#6b7280',
-    marginTop: '2px',
-  },
-  body: {
-    fontSize: '0.95rem',
-    color: '#374151',
-    margin: 0,
-    whiteSpace: 'pre-line',
+  list: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '16px',
   },
   loadingText: {
     color: '#9ca3af',
     fontStyle: 'italic',
-    textAlign: 'center',
     padding: '20px',
+    textAlign: 'center',
+  },
+  name: {
+    color: '#111827',
+    fontSize: '0.95rem',
+    fontWeight: '600',
+    textTransform: 'capitalize',
+  },
+  section: {
+    marginTop: '20px',
+  },
+  title: {
+    alignItems: 'center',
+    color: '#111827',
+    display: 'flex',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    gap: '8px',
+    marginBottom: '20px',
   },
 };
 

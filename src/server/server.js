@@ -7,16 +7,15 @@ const initialPosts = await fetch(
     if (!r.ok) {
       throw Error();
     }
+
     return r.json();
   })
   .catch(() => []);
 
-console.log('initialPosts', initialPosts);
-
 function makeServer() {
   return createServer({
-    serializers: {
-      application: RestSerializer,
+    fixtures: {
+      posts: initialPosts,
     },
     models: {
       post: Model,
@@ -27,8 +26,8 @@ function makeServer() {
       this.resource('posts');
       this.passthrough('https://jsonplaceholder.typicode.com/**');
     },
-    fixtures: {
-      posts: initialPosts,
+    serializers: {
+      application: RestSerializer,
     },
   });
 }

@@ -12,7 +12,7 @@ function NavList() {
           .filter((route) => route.name)
           .map((route) => (
             <li key={route.path} style={styles.navItem}>
-              <NavLink to={route.path} style={styles.link} end>
+              <NavLink end style={styles.link} to={route.path}>
                 {route.name}
               </NavLink>
             </li>
@@ -23,34 +23,34 @@ function NavList() {
 }
 
 const styles = {
-  navList: {
-    listStyle: 'none',
-    padding: 0,
-    margin: 0,
-  },
+  link: ({ isActive }) => ({
+    backgroundColor: isActive ? 'rgba(78, 204, 163, 0.1)' : 'transparent',
+    borderRadius: '8px',
+    color: isActive ? '#4ecca3' : '#a2a2c2',
+    display: 'block',
+    fontSize: '16px',
+    padding: '10px 15px',
+    textDecoration: 'none',
+    transition: 'all 0.3s ease',
+  }),
   navItem: {
     marginBottom: '10px',
   },
+  navList: {
+    listStyle: 'none',
+    margin: 0,
+    padding: 0,
+  },
   title: {
+    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    color: '#4ecca3',
     fontSize: '24px',
     fontWeight: 'bold',
-    marginBottom: '30px',
-    color: '#4ecca3',
     letterSpacing: '1px',
-    textAlign: 'center',
-    borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+    marginBottom: '30px',
     paddingBottom: '15px',
+    textAlign: 'center',
   },
-  link: ({ isActive }) => ({
-    textDecoration: 'none',
-    color: isActive ? '#4ecca3' : '#a2a2c2',
-    fontSize: '16px',
-    padding: '10px 15px',
-    borderRadius: '8px',
-    display: 'block',
-    transition: 'all 0.3s ease',
-    backgroundColor: isActive ? 'rgba(78, 204, 163, 0.1)' : 'transparent',
-  }),
 };
 
 export default NavList;

@@ -6,21 +6,21 @@ import { useGetPosts } from '../react-query/queries';
 function Posts() {
   const [enabled, setEnabled] = useState(true);
   const resetAllPosts = useResetAllPosts();
-  const { data: posts = [], refetch, isLoading } = useGetPosts(enabled);
+  const { data: posts = [], isLoading, refetch } = useGetPosts(enabled);
 
   return (
     <>
       <div style={styles.controls}>
         <button
-          style={styles.toggleButton}
           onClick={() => setEnabled(!enabled)}
+          style={styles.toggleButton}
         >
           {enabled ? 'enabled' : 'disabled'}
         </button>
-        <button style={styles.toggleButton} onClick={() => refetch()}>
+        <button onClick={() => refetch()} style={styles.toggleButton}>
           Refetch
         </button>
-        <button style={styles.toggleButton} onClick={resetAllPosts}>
+        <button onClick={resetAllPosts} style={styles.toggleButton}>
           Reset
         </button>
       </div>
@@ -37,15 +37,15 @@ const styles = {
     gap: '10px',
     justifyContent: 'flex-end',
   },
-  toggleButton: {
-    padding: '4px 8px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: '#f5f5f5',
-    cursor: 'pointer',
-  },
   heading: {
     marginBottom: '20px',
+  },
+  toggleButton: {
+    backgroundColor: '#f5f5f5',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    padding: '4px 8px',
   },
 };
 

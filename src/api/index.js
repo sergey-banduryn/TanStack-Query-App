@@ -1,7 +1,35 @@
-function getPosts() {
-  return fetch('/api/posts')
-    .then((r) => r.json())
-    .then(({ posts }) => posts);
+async function createPost(post) {
+  const response = await fetch('/api/posts', {
+    body: JSON.stringify({ post }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'POST',
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
+  return response.json().then(({ post }) => post);
+}
+
+async function deletePost(id) {
+  const response = await fetch(`/api/posts/${id}`, {
+    method: 'DELETE',
+  });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+}
+
+async function getComments(id) {
+  await new Promise((r) => setTimeout(r, 1000));
+
+  return fetch(
+    `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
+  ).then((r) => r.json());
 }
 
 function getPost(id) {
@@ -10,48 +38,26 @@ function getPost(id) {
     .then(({ post }) => post ?? null);
 }
 
-async function createPost(post) {
-  const response = await fetch('/api/posts', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ post }),
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
-  return response.json().then(({ post }) => post);
-}
-
-async function getComments(id) {
-  await new Promise((r) => setTimeout(r, 1000));
-  return fetch(
-    `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
-  ).then((r) => r.json());
-}
-
-async function deletePost(id) {
-  const response = await fetch(`/api/posts/${id}`, {
-    method: 'DELETE',
-  });
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
-  }
+function getPosts() {
+  return fetch('/api/posts')
+    .then((r) => r.json())
+    .then(({ posts }) => posts);
 }
 
 async function updatePost(post) {
   const response = await fetch(`/api/posts/${post.id}`, {
-    method: 'PATCH',
+    body: JSON.stringify({ post }),
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ post }),
+    method: 'PATCH',
   });
+
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
+
   return response.json().then(({ post }) => post);
 }
 
-export { getPosts, createPost, getPost, getComments, deletePost, updatePost };
+export { createPost, deletePost, getComments, getPost, getPosts, updatePost };

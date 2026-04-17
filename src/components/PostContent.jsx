@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router';
-import { useDeletePost } from '../react-query/mutations';
 import { useNotification } from './Notification';
+import { useDeletePost } from '../react-query/mutations';
 
-function PostContent({ post, onEdit }) {
+function PostContent({ onEdit, post }) {
   const navigate = useNavigate();
   const deleteMutation = useDeletePost(post.id);
   const notify = useNotification();
@@ -26,8 +26,8 @@ function PostContent({ post, onEdit }) {
             Edit
           </button>
           <button
-            onClick={handleDelete}
             disabled={deleteMutation.isPending}
+            onClick={handleDelete}
             style={styles.deleteBtn}
           >
             {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
@@ -40,48 +40,48 @@ function PostContent({ post, onEdit }) {
 }
 
 const styles = {
-  header: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: '15px',
-  },
-  title: {
-    fontSize: '1.5rem',
-    margin: 0,
-    color: '#111',
-    textTransform: 'capitalize',
-    fontWeight: '700',
-  },
-  deleteBtn: {
-    backgroundColor: '#ff4d4f',
-    color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontSize: '0.9rem',
-    fontWeight: '600',
-    transition: 'all 0.2s',
-  },
-  body: {
-    fontSize: '1rem',
-    margin: 0,
-    color: '#444',
-    lineHeight: '1.6',
-  },
   actions: {
     display: 'flex',
     gap: '10px',
   },
-  editBtn: {
-    backgroundColor: '#f3f4f6',
-    color: '#333',
+  body: {
+    color: '#444',
+    fontSize: '1rem',
+    lineHeight: '1.6',
+    margin: 0,
+  },
+  deleteBtn: {
+    backgroundColor: '#ff4d4f',
     border: 'none',
     borderRadius: '6px',
+    color: 'white',
+    cursor: 'pointer',
+    fontSize: '0.9rem',
+    fontWeight: '600',
     padding: '8px 16px',
+    transition: 'all 0.2s',
+  },
+  editBtn: {
+    backgroundColor: '#f3f4f6',
+    border: 'none',
+    borderRadius: '6px',
+    color: '#333',
     cursor: 'pointer',
     fontWeight: '600',
+    padding: '8px 16px',
+  },
+  header: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    justifyContent: 'space-between',
+    marginBottom: '15px',
+  },
+  title: {
+    color: '#111',
+    fontSize: '1.5rem',
+    fontWeight: '700',
+    margin: 0,
+    textTransform: 'capitalize',
   },
 };
 

@@ -1,7 +1,7 @@
-import { useUpdatePost } from '../react-query/mutations';
 import { useNotification } from './Notification';
+import { useUpdatePost } from '../react-query/mutations';
 
-function EditPostForm({ post, onCancel }) {
+function EditPostForm({ onCancel, post }) {
   const updateMutation = useUpdatePost(post.id);
   const notify = useNotification();
 
@@ -23,22 +23,22 @@ function EditPostForm({ post, onCancel }) {
   return (
     <form onSubmit={handleSubmit} style={styles.form}>
       <input
-        name='title'
         defaultValue={post.title}
-        style={styles.input}
+        name='title'
         placeholder='Title'
+        style={styles.input}
       />
       <textarea
-        name='body'
         defaultValue={post.body}
-        style={styles.textarea}
+        name='body'
         placeholder='Body'
+        style={styles.textarea}
       />
       <div style={styles.buttonGroup}>
-        <button type='button' onClick={onCancel} style={styles.cancelBtn}>
+        <button onClick={onCancel} style={styles.cancelBtn} type='button'>
           Cancel
         </button>
-        <button type='submit' style={styles.saveBtn}>
+        <button style={styles.saveBtn} type='submit'>
           Save
         </button>
       </div>
@@ -47,49 +47,49 @@ function EditPostForm({ post, onCancel }) {
 }
 
 const styles = {
+  buttonGroup: {
+    display: 'flex',
+    gap: '10px',
+    justifyContent: 'flex-end',
+  },
+  cancelBtn: {
+    backgroundColor: '#eee',
+    border: 'none',
+    borderRadius: '6px',
+    color: '#333',
+    cursor: 'pointer',
+    fontWeight: '600',
+    padding: '8px 16px',
+  },
   form: {
     display: 'flex',
     flexDirection: 'column',
     gap: '15px',
   },
   input: {
-    padding: '10px',
-    borderRadius: '6px',
     border: '1px solid #ddd',
+    borderRadius: '6px',
     fontSize: '1.1rem',
     fontWeight: '600',
-  },
-  textarea: {
     padding: '10px',
-    borderRadius: '6px',
-    border: '1px solid #ddd',
-    fontSize: '1rem',
-    minHeight: '100px',
-    fontFamily: 'inherit',
-    resize: 'vertical',
-  },
-  buttonGroup: {
-    display: 'flex',
-    gap: '10px',
-    justifyContent: 'flex-end',
   },
   saveBtn: {
     backgroundColor: '#3b82f6',
+    border: 'none',
+    borderRadius: '6px',
     color: 'white',
-    border: 'none',
-    borderRadius: '6px',
-    padding: '8px 16px',
     cursor: 'pointer',
     fontWeight: '600',
+    padding: '8px 16px',
   },
-  cancelBtn: {
-    backgroundColor: '#eee',
-    color: '#333',
-    border: 'none',
+  textarea: {
+    border: '1px solid #ddd',
     borderRadius: '6px',
-    padding: '8px 16px',
-    cursor: 'pointer',
-    fontWeight: '600',
+    fontFamily: 'inherit',
+    fontSize: '1rem',
+    minHeight: '100px',
+    padding: '10px',
+    resize: 'vertical',
   },
 };
 

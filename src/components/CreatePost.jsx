@@ -16,7 +16,7 @@ function CreatePost() {
     id++;
 
     try {
-      await mutation.mutateAsync({ title, body, userId, id });
+      await mutation.mutateAsync({ body, id, title, userId });
       setTitle('');
       setBody('');
       notify('Post created successfully');
@@ -34,14 +34,14 @@ function CreatePost() {
             Title
           </label>
           <input
-            id='title'
-            type='text'
-            placeholder='Enter post title'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={styles.input}
             disabled={mutation.isPending}
+            id='title'
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder='Enter post title'
             required
+            style={styles.input}
+            type='text'
+            value={title}
           />
         </div>
         <div style={styles.inputGroup}>
@@ -49,22 +49,22 @@ function CreatePost() {
             Content
           </label>
           <textarea
-            id='body'
-            placeholder='What is on your mind?'
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            style={{ ...styles.input, ...styles.textarea }}
             disabled={mutation.isPending}
+            id='body'
+            onChange={(e) => setBody(e.target.value)}
+            placeholder='What is on your mind?'
             required
+            style={{ ...styles.input, ...styles.textarea }}
+            value={body}
           />
         </div>
         <button
-          type='submit'
+          disabled={mutation.isPending}
           style={{
             ...styles.button,
             ...(mutation.isPending ? styles.buttonDisabled : {}),
           }}
-          disabled={mutation.isPending}
+          type='submit'
         >
           {mutation.isPending ? 'Creating...' : 'Create Post'}
         </button>
@@ -74,20 +74,36 @@ function CreatePost() {
 }
 
 const styles = {
+  button: {
+    backgroundColor: '#4f46e5',
+    border: 'none',
+    borderRadius: '12px',
+    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)',
+    color: 'white',
+    cursor: 'pointer',
+    fontSize: '16px',
+    fontWeight: '600',
+    padding: '14px',
+    transition: 'background-color 0.2s, transform 0.1s',
+  },
+  buttonDisabled: {
+    backgroundColor: '#9ca3af',
+    boxShadow: 'none',
+    cursor: 'not-allowed',
+  },
   container: {
     backgroundColor: '#ffffff',
-    padding: '32px',
     borderRadius: '16px',
     boxShadow: '0 10px 25px rgba(0, 0, 0, 0.05)',
-    maxWidth: '500px',
-    margin: '20px auto',
     fontFamily: '"Outfit", "Inter", sans-serif',
+    margin: '20px auto',
+    maxWidth: '500px',
+    padding: '32px',
   },
-  title: {
-    margin: '0 0 24px 0',
-    fontSize: '24px',
-    fontWeight: '700',
-    color: '#1a1a2e',
+  errorText: {
+    color: '#ef4444',
+    fontSize: '14px',
+    marginTop: '12px',
     textAlign: 'center',
   },
   form: {
@@ -95,50 +111,34 @@ const styles = {
     flexDirection: 'column',
     gap: '20px',
   },
+  input: {
+    backgroundColor: '#f8fafc',
+    border: '1px solid #e2e8f0',
+    borderRadius: '8px',
+    fontSize: '16px',
+    outline: 'none',
+    padding: '12px 16px',
+    transition: 'border-color 0.2s, box-shadow 0.2s',
+  },
   inputGroup: {
     display: 'flex',
     flexDirection: 'column',
     gap: '8px',
   },
   label: {
+    color: '#4a5568',
     fontSize: '14px',
     fontWeight: '600',
-    color: '#4a5568',
-  },
-  input: {
-    padding: '12px 16px',
-    borderRadius: '8px',
-    border: '1px solid #e2e8f0',
-    fontSize: '16px',
-    outline: 'none',
-    transition: 'border-color 0.2s, box-shadow 0.2s',
-    backgroundColor: '#f8fafc',
   },
   textarea: {
     minHeight: '120px',
     resize: 'vertical',
   },
-  button: {
-    padding: '14px',
-    borderRadius: '12px',
-    border: 'none',
-    backgroundColor: '#4f46e5',
-    color: 'white',
-    fontSize: '16px',
-    fontWeight: '600',
-    cursor: 'pointer',
-    transition: 'background-color 0.2s, transform 0.1s',
-    boxShadow: '0 4px 6px -1px rgba(79, 70, 229, 0.2)',
-  },
-  buttonDisabled: {
-    backgroundColor: '#9ca3af',
-    cursor: 'not-allowed',
-    boxShadow: 'none',
-  },
-  errorText: {
-    color: '#ef4444',
-    fontSize: '14px',
-    marginTop: '12px',
+  title: {
+    color: '#1a1a2e',
+    fontSize: '24px',
+    fontWeight: '700',
+    margin: '0 0 24px 0',
     textAlign: 'center',
   },
 };

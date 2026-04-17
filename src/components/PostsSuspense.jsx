@@ -1,7 +1,13 @@
 import { Suspense } from 'react';
 import PostsList from './PostsList';
-import { useSuspenseGetPosts } from '../react-query/queries';
 import { useResetAllPosts } from '../react-query/common';
+import { useSuspenseGetPosts } from '../react-query/queries';
+
+function PostsListSuspense() {
+  const { data: posts } = useSuspenseGetPosts();
+
+  return <PostsList posts={posts} />;
+}
 
 function PostsSuspense() {
   const resetAllPosts = useResetAllPosts();
@@ -9,7 +15,7 @@ function PostsSuspense() {
   return (
     <>
       <div style={styles.controls}>
-        <button style={styles.toggleButton} onClick={resetAllPosts}>
+        <button onClick={resetAllPosts} style={styles.toggleButton}>
           Reset
         </button>
       </div>
@@ -21,27 +27,21 @@ function PostsSuspense() {
   );
 }
 
-function PostsListSuspense() {
-  const { data: posts } = useSuspenseGetPosts();
-
-  return <PostsList posts={posts} />;
-}
-
 const styles = {
   controls: {
     display: 'flex',
     gap: '10px',
     justifyContent: 'flex-end',
   },
-  toggleButton: {
-    padding: '4px 8px',
-    border: '1px solid #ccc',
-    borderRadius: '4px',
-    backgroundColor: '#f5f5f5',
-    cursor: 'pointer',
-  },
   heading: {
     marginBottom: '20px',
+  },
+  toggleButton: {
+    backgroundColor: '#f5f5f5',
+    border: '1px solid #ccc',
+    borderRadius: '4px',
+    cursor: 'pointer',
+    padding: '4px 8px',
   },
 };
 

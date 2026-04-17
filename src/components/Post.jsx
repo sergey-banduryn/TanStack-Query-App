@@ -18,10 +18,10 @@ function Post() {
         {isSuccess &&
           post &&
           (isEditing ? (
-            <EditPostForm post={post} onCancel={() => setIsEditing(false)} />
+            <EditPostForm onCancel={() => setIsEditing(false)} post={post} />
           ) : (
             <>
-              <PostContent post={post} onEdit={() => setIsEditing(true)} />
+              <PostContent onEdit={() => setIsEditing(true)} post={post} />
               <Comments id={id} />
             </>
           ))}
@@ -32,12 +32,12 @@ function Post() {
 
 const styles = {
   postCard: {
+    backgroundColor: '#fff',
     border: '1px solid #eee',
     borderRadius: '8px',
-    padding: '20px',
-    backgroundColor: '#fff',
     boxShadow: '0 4px 6px rgba(0,0,0,0.05)',
     marginBottom: '20px',
+    padding: '20px',
   },
 };
 

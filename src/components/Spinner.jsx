@@ -13,17 +13,17 @@ const Spinner = () => (
 );
 
 const styles = {
+  spinner: {
+    animation: 'spin 1s linear infinite',
+    border: '3px solid #f3f3f3',
+    borderRadius: '50%',
+    borderTop: '3px solid #3498db',
+    height: '30px',
+    width: '30px',
+  },
   spinnerWrapper: {
     display: 'inline-flex',
     justifyContent: 'center',
-  },
-  spinner: {
-    width: '30px',
-    height: '30px',
-    border: '3px solid #f3f3f3',
-    borderTop: '3px solid #3498db',
-    borderRadius: '50%',
-    animation: 'spin 1s linear infinite',
   },
 };
 

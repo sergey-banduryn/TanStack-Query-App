@@ -1,35 +1,36 @@
 import Home from '../components/Home';
 import Post from '../components/Post';
-import Posts from '../components/Posts';
 import PostsSuspense from '../components/PostsSuspense';
 import SomePosts from '../components/SomePosts';
 
-export const routesConfig = [
+const routesConfig = [
   {
+    component: Home,
     index: true,
-    component: Home,
   },
   {
-    path: '/Posts',
+    component: Home,
     name: 'Posts',
-    component: Home,
+    path: '/Posts',
   },
   {
-    path: '/Posts/:id',
     component: Post,
+    path: '/Posts/:id',
   },
   {
-    path: '/PostsSuspense',
-    name: 'PostsSuspense',
     component: PostsSuspense,
+    name: 'PostsSuspense',
+    path: '/PostsSuspense',
   },
   {
-    path: '/SomePosts',
-    name: 'SomePosts',
     component: SomePosts,
+    name: 'SomePosts',
+    path: '/SomePosts',
   },
   {
     path: '*',
     redirectTo: '/',
   },
 ];
+
+export { routesConfig };
