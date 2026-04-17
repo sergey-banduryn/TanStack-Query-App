@@ -26,12 +26,14 @@ function EditPostForm({ onCancel, post }) {
         defaultValue={post.title}
         name='title'
         placeholder='Title'
+        required
         style={styles.input}
       />
       <textarea
         defaultValue={post.body}
         name='body'
         placeholder='Body'
+        required
         style={styles.textarea}
       />
       <div style={styles.buttonGroup}>

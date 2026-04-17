@@ -61,7 +61,10 @@ function useUpdatePost(id) {
       queryClient.invalidateQueries({
         queryKey: postOptions.detail(id).queryKey,
       });
-      queryClient.refetchQueries({ queryKey: postOptions.all().queryKey });
+      queryClient.refetchQueries({
+        exact: true,
+        queryKey: postOptions.all().queryKey,
+      });
     },
   });
 }

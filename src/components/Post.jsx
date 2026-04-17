@@ -8,13 +8,14 @@ import { useGetPost } from '../react-query/queries';
 function Post() {
   let { id } = useParams();
   const [isEditing, setIsEditing] = useState(false);
-  const { data: post, isLoading, isSuccess } = useGetPost(id);
+  const { data: post, isError, isFetching, isSuccess } = useGetPost(id);
 
   return (
     <>
       <article style={styles.postCard}>
-        {isLoading && <p>Loading post...</p>}
-        {isSuccess && !post && <p>Post not found</p>}
+        {isFetching && !post && <p>Loading post...</p>}
+        {isError && <p>Error loading post. Please try again later.</p>}
+        {isSuccess && !isFetching && !post && <p>Post not found</p>}
         {isSuccess &&
           post &&
           (isEditing ? (

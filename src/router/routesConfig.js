@@ -7,6 +7,7 @@ const routesConfig = [
   {
     component: Home,
     index: true,
+    redirectTo: '/Posts',
   },
   {
     component: Home,
