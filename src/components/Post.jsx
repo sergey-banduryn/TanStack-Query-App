@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
+import BackButton from './BackButton';
 import Comments from './Comments';
 import EditPostForm from './EditPostForm';
 import PostContent from './PostContent';
@@ -12,6 +13,7 @@ function Post() {
 
   return (
     <>
+      <BackButton />
       <article style={styles.postCard}>
         {isFetching && !post && <p>Loading post...</p>}
         {isError && <p>Error loading post. Please try again later.</p>}
