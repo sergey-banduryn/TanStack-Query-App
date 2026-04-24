@@ -4,7 +4,9 @@ import { useResetAllPosts } from '../react-query/common';
 import { useSuspenseGetPosts } from '../react-query/queries';
 
 function PostsListSuspense() {
-  const { data: posts } = useSuspenseGetPosts();
+  const {
+    data: { posts },
+  } = useSuspenseGetPosts({ limit: 10, page: 1 });
 
   return <PostsList posts={posts} />;
 }

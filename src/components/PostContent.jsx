@@ -20,7 +20,9 @@ function PostContent({ onEdit, post }) {
   return (
     <>
       <div style={styles.header}>
-        <h2 style={styles.title}>{post.title}</h2>
+        <h2 style={styles.title}>
+          {post.id} {post.title}
+        </h2>
         <div style={styles.actions}>
           <button onClick={onEdit} style={styles.editBtn}>
             Edit

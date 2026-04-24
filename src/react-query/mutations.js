@@ -8,7 +8,7 @@ function useCreatePost() {
   return useMutation({
     mutationFn: createPost,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: postOptions.all().queryKey });
+      queryClient.invalidateQueries({ queryKey: postOptions.lists().queryKey });
     },
   });
 }
@@ -20,13 +20,21 @@ function useDeletePost(id) {
     mutationFn: () => deletePost(id),
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: postOptions.detail(id).queryKey });
-      queryClient.setQueryData(postOptions.all().queryKey, (oldData) => {
-        if (!oldData) {
-          return [];
-        }
 
-        return oldData.filter((p) => p.id !== id);
+      const allQueries = queryClient.getQueriesData({
+        queryKey: postOptions.lists().queryKey,
       });
+
+      for (const [key, data] of allQueries) {
+        const post = data?.posts?.find((p) => p.id === id);
+
+        if (post) {
+          queryClient.setQueryData(key, (old) => ({
+            ...old,
+            posts: old.posts.filter((p) => p.id !== id),
+          }));
+        }
+      }
     },
   });
 }
@@ -61,10 +69,21 @@ function useUpdatePost(id) {
       queryClient.invalidateQueries({
         queryKey: postOptions.detail(id).queryKey,
       });
-      queryClient.refetchQueries({
-        exact: true,
-        queryKey: postOptions.all().queryKey,
+
+      const allQueries = queryClient.getQueriesData({
+        queryKey: postOptions.lists().queryKey,
       });
+
+      for (const [key, data] of allQueries) {
+        const post = data?.posts?.find((p) => p.id === id);
+
+        if (post) {
+          queryClient.refetchQueries({
+            exact: true,
+            queryKey: key,
+          });
+        }
+      }
     },
   });
 }

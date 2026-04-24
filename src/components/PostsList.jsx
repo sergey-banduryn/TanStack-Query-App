@@ -8,7 +8,9 @@ function PostsList({ posts = [] }) {
       {sortedPosts.map((post) => (
         <Link key={post.id} to={`/Posts/${post.id}`}>
           <article style={styles.postCard}>
-            <h2 style={styles.title}>{post.title}</h2>
+            <h2 style={styles.title}>
+              {post.id} {post.title}
+            </h2>
             <p style={styles.body}>{post.body}</p>
           </article>
         </Link>

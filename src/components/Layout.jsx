@@ -36,6 +36,7 @@ const styles = {
     position: 'fixed',
     right: 0,
     top: 0,
+    zIndex: 999,
   },
   main: {
     backgroundColor: '#f8f9fa',

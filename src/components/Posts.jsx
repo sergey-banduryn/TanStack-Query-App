@@ -1,12 +1,31 @@
 import { useState } from 'react';
+import { useSearchParams } from 'react-router';
+import Pagination from './Pagination';
 import PostsList from './PostsList';
 import { useResetAllPosts } from '../react-query/common';
 import { useGetPosts } from '../react-query/queries';
 
 function Posts() {
   const [enabled, setEnabled] = useState(true);
+  const [searchParams] = useSearchParams();
+
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = parseInt(searchParams.get('limit') || '10', 10);
+
   const resetAllPosts = useResetAllPosts();
-  const { data: posts = [], isLoading, refetch } = useGetPosts(enabled);
+
+  const {
+    data = {},
+    isLoading,
+    isPlaceholderData,
+    refetch,
+  } = useGetPosts({
+    enabled,
+    limit,
+    page,
+  });
+
+  const { meta = {}, posts = [] } = data;
 
   return (
     <>
@@ -26,7 +45,10 @@ function Posts() {
       </div>
       <h1 style={styles.heading}>Recent Posts</h1>
       {isLoading && <div>Loading...</div>}
-      <PostsList posts={posts} />
+      <div style={{ opacity: isPlaceholderData ? 0.5 : 1, zIndex: 1 }}>
+        <PostsList posts={posts} />
+      </div>
+      <Pagination meta={meta} />
     </>
   );
 }

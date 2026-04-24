@@ -1,4 +1,5 @@
 import {
+  keepPreviousData,
   useQueries,
   useQuery,
   useQueryClient,
@@ -16,18 +17,29 @@ function useGetPost(id) {
   return useQuery({
     ...postOptions.detail(id),
     placeholderData: () => {
-      const posts = queryClient.getQueryData(postOptions.all().queryKey);
-      const post = posts?.find((post) => post.id === id);
+      const allQueries = queryClient.getQueriesData({
+        queryKey: postOptions.lists().queryKey,
+      });
 
-      return post;
+      // eslint-disable-next-line no-unused-vars
+      for (const [key, data] of allQueries) {
+        const post = data?.posts?.find((p) => p.id === id);
+
+        if (post) {
+          return post;
+        }
+      }
+
+      return null;
     },
   });
 }
 
-function useGetPosts(enabled = true) {
+function useGetPosts({ enabled = true, limit, page }) {
   return useQuery({
-    ...postOptions.all(),
-    enabled: enabled,
+    ...postOptions.list({ limit, page }),
+    enabled,
+    placeholderData: keepPreviousData,
   });
 }
 
@@ -55,8 +67,8 @@ function useSomePosts(ids) {
   });
 }
 
-function useSuspenseGetPosts() {
-  return useSuspenseQuery(postOptions.all());
+function useSuspenseGetPosts({ limit, page }) {
+  return useSuspenseQuery(postOptions.list({ limit, page }));
 }
 
 export {

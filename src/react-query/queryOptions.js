@@ -6,12 +6,13 @@ const postKeys = {
   comments: (postId) => [...postKeys.detail(postId), 'comments'],
   detail: (postId) => [...postKeys.details(), postId],
   details: () => [...postKeys.all, 'detail'],
+  list: (params) => [...postKeys.lists(), params],
+  lists: () => [...postKeys.all, 'list'],
 };
 
 const postOptions = {
   all: () =>
     queryOptions({
-      queryFn: getPosts,
       queryKey: postKeys.all,
     }),
   comments: (id) =>
@@ -23,6 +24,15 @@ const postOptions = {
     queryOptions({
       queryFn: () => getPost(id),
       queryKey: postKeys.detail(id),
+    }),
+  list: (params) =>
+    queryOptions({
+      queryFn: () => getPosts(params),
+      queryKey: postKeys.list(params),
+    }),
+  lists: () =>
+    queryOptions({
+      queryKey: postKeys.lists(),
     }),
 };
 

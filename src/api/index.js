@@ -38,10 +38,10 @@ function getPost(id) {
     .then(({ post }) => post ?? null);
 }
 
-function getPosts() {
-  return fetch('/api/posts')
+function getPosts({ limit = 10, page = 1 }) {
+  return fetch(`/api/posts?limit=${limit}&page=${page}`)
     .then((r) => r.json())
-    .then(({ posts }) => posts);
+    .then((data) => data);
 }
 
 async function updatePost(post) {
