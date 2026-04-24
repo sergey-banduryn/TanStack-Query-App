@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 import Pagination from './Pagination';
 import PostsList from './PostsList';
+import { useScrollToTopOnPageChange } from '../hooks/useScrollToTop';
 import { useResetAllPosts } from '../react-query/common';
 import { useGetPosts } from '../react-query/queries';
 
@@ -13,6 +14,7 @@ function Posts() {
   const limit = parseInt(searchParams.get('limit') || '10', 10);
 
   const resetAllPosts = useResetAllPosts();
+  useScrollToTopOnPageChange(page);
 
   const {
     data = {},
