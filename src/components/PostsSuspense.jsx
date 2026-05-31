@@ -1,15 +1,6 @@
 import { Suspense } from 'react';
-import PostsList from './PostsList';
+import { PostsListSuspense } from './PostsListSuspense';
 import { useResetAllPosts } from '../react-query/common';
-import { useSuspenseGetPosts } from '../react-query/queries';
-
-function PostsListSuspense() {
-  const {
-    data: { posts },
-  } = useSuspenseGetPosts({ limit: 10, page: 1 });
-
-  return <PostsList posts={posts} />;
-}
 
 function PostsSuspense() {
   const resetAllPosts = useResetAllPosts();

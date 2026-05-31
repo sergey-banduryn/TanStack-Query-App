@@ -3,6 +3,7 @@ import {
   useQueries,
   useQuery,
   useQueryClient,
+  useSuspenseInfiniteQuery,
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import { postOptions } from './queryOptions';
@@ -71,10 +72,31 @@ function useSuspenseGetPosts({ limit, page }) {
   return useSuspenseQuery(postOptions.list({ limit, page }));
 }
 
+function useSuspenseInfiniteGetPosts({ limit, page }) {
+  return useSuspenseInfiniteQuery({
+    ...postOptions.infiniteList(),
+    // eslint-disable-next-line no-unused-vars
+    getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
+      const { limit, page, totalPages } = lastPage.meta;
+
+      if (page < totalPages) {
+        return {
+          limit,
+          page: page + 1,
+        };
+      }
+
+      return null;
+    },
+    initialPageParam: { limit, page },
+  });
+}
+
 export {
   useGetComments,
   useGetPost,
   useGetPosts,
   useSomePosts,
   useSuspenseGetPosts,
+  useSuspenseInfiniteGetPosts,
 };
