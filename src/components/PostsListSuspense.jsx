@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 import PostsList from './PostsList';
 import Spinner from './Spinner';
@@ -9,12 +10,19 @@ function PostsListSuspense() {
 
   const posts = data.pages.flatMap((page) => page.posts);
 
+  const scrolledElementRef = useRef(null);
+
+  useEffect(() => {
+    scrolledElementRef.current = document.querySelector('main');
+  }, []);
+
   const { ref } = useInView({
     onChange: (inView) => {
       if (inView && hasNextPage && !isFetchingNextPage) {
         fetchNextPage();
       }
     },
+    root: scrolledElementRef.current,
     rootMargin: '0px 0px 600px 0px',
     skip: isFetchingNextPage,
     threshold: 0,

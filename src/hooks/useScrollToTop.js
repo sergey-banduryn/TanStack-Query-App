@@ -11,7 +11,8 @@ function useScrollToTopOnPageChange(page, duration = 2000) {
     }
 
     const slowScrollToTop = (d) => {
-      const startPos = window.scrollY;
+      const scrolledElement = document.querySelector('main');
+      const startPos = scrolledElement.scrollTop;
       const startTime = performance.now();
 
       const animate = (currentTime) => {
@@ -20,7 +21,7 @@ function useScrollToTopOnPageChange(page, duration = 2000) {
 
         const ease = (t) => t * (2 - t);
 
-        window.scrollTo(0, startPos * (1 - ease(progress)));
+        scrolledElement.scrollTo(0, startPos * (1 - ease(progress)));
 
         if (progress < 1) {
           requestAnimationFrame(animate);

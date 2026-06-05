@@ -1,21 +1,29 @@
 import { useNavigate } from 'react-router';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 const BackButton = () => {
   const navigate = useNavigate();
+  const isTablet = useMediaQuery('(max-width: 1023px)');
 
   return (
-    <button
-      onClick={() => navigate(-1)}
-      onMouseEnter={(e) =>
-        Object.assign(e.currentTarget.style, styles.buttonHover)
-      }
-      onMouseLeave={(e) => Object.assign(e.currentTarget.style, styles.button)}
-      style={styles.button}
-      title='Go back'
-      type='button'
-    >
-      <span style={styles.arrow}>←</span>
-    </button>
+    <>
+      {!isTablet && (
+        <button
+          onClick={() => navigate(-1)}
+          onMouseEnter={(e) =>
+            Object.assign(e.currentTarget.style, styles.buttonHover)
+          }
+          onMouseLeave={(e) =>
+            Object.assign(e.currentTarget.style, styles.button)
+          }
+          style={styles.button}
+          title='Go back'
+          type='button'
+        >
+          <span style={styles.arrow}>←</span>
+        </button>
+      )}
+    </>
   );
 };
 
@@ -38,7 +46,7 @@ const styles = {
     display: 'flex',
     height: '48px',
     justifyContent: 'center',
-    left: '324px',
+    left: '314px',
     position: 'fixed',
     top: '88px',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',

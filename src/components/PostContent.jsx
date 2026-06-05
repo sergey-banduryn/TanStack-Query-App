@@ -44,6 +44,7 @@ function PostContent({ onEdit, post }) {
 const styles = {
   actions: {
     display: 'flex',
+    flexWrap: 'wrap',
     gap: '10px',
   },
   body: {
@@ -75,6 +76,7 @@ const styles = {
   header: {
     alignItems: 'flex-start',
     display: 'flex',
+    gap: '10px',
     justifyContent: 'space-between',
     marginBottom: '15px',
   },

@@ -1,7 +1,9 @@
 import { useSearchParams } from 'react-router';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 
 const Pagination = ({ meta = {} }) => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const isTablet = useMediaQuery('(max-width: 1023px)');
 
   const currentPage = parseInt(searchParams.get('page') || '1', 10);
   const { totalPages = 0 } = meta;
@@ -21,7 +23,7 @@ const Pagination = ({ meta = {} }) => {
 
   const getPages = () => {
     const pages = [];
-    const maxVisible = 5;
+    const maxVisible = isTablet ? 1 : 3;
 
     let start = Math.max(1, currentPage - Math.floor(maxVisible / 2));
     let end = Math.min(totalPages, start + maxVisible - 1);
@@ -136,7 +138,6 @@ const styles = {
   container: {
     alignItems: 'center',
     display: 'flex',
-    fontFamily: 'Inter, sans-serif',
     gap: '12px',
     justifyContent: 'center',
     marginTop: '30px',

@@ -6,10 +6,25 @@
   padding: 0;
 }
 
+:root {
+  font-family:
+    Roboto Mono,
+    monospace;
+}
+
 html {
   scrollbar-gutter: stable;
 }
 
 a {
   text-decoration: none;
+}
+
+input,
+button,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
 }

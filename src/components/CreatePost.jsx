@@ -95,7 +95,6 @@ const styles = {
     backgroundColor: '#ffffff',
     borderRadius: '16px',
     boxShadow: '0 10px 25px rgba(0, 0, 0, 0.05)',
-    fontFamily: '"Outfit", "Inter", sans-serif',
     margin: '20px auto',
     maxWidth: '500px',
     padding: '32px',
